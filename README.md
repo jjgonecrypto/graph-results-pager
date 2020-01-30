@@ -2,25 +2,32 @@
 
 Utility to get paged results from The Graph endpoints
 
-## Example Usage
+## Usage
 
 ```javascript
 graphResultsPager({
 	api: 'https://api.thegraph.com/subgraphs/name/...',
-	max: 12, // a single fetch can return 1000 results, any larger and mulitple requests will be required
+	// Note: a single subgraph fetch can return 1000 results, any larger numbers will trigger multiple fetches
+	max: 12, // leave empty for all results
 	query: {
 		entity: '...',
 		selection: {
 			orderBy: '...',
 			orderDirection: 'desc',
 			where: {
+				// Note: the below filters are combined - like the AND operater in an SQL WHERE clause
 				someStringField: `\\"${someValue}\\"`, // use double quotes for strings / bytes / addresses
-				someNumber: 321,
+				someNumber: 321, // numbers don't require escaping
+				// ...
+				willBeIgnored: undefined, // useful if you want to use the ternary operator for inline checks
 			},
 		},
 		properties: [
-			// name of the entity's fields you want returned
+			'id',
+			...ss, // the list of the entity's fields you want returned
 		],
 	},
 });
 ```
+
+For an example in node, try running `node example.js`
