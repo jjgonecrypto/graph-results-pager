@@ -1,10 +1,14 @@
-# graph-pager
+# graph-results-pager
 
 Utility to get paged results from The Graph endpoints
 
-## Usage
+## Node & Webpack Usage
 
 ```javascript
+const graphResultsPager = require('graph-results-pager'); // common js
+// or
+import graphResultsPager from 'graph-results-pager';
+
 graphResultsPager({
 	api: 'https://api.thegraph.com/subgraphs/name/...',
 	// Note: a single subgraph fetch can return 1000 results, any larger numbers will trigger multiple fetches
@@ -31,3 +35,12 @@ graphResultsPager({
 ```
 
 For an example in node, try running `node example.js`
+
+## Direct browser usage
+
+```html
+<script src="//cdn.jsdelivr.net/npm/graph-results-pager/browser.js"></script>
+<script>
+	window.graphResultsPager({...}).then(console.log).catch(console.error)
+</script>
+```
