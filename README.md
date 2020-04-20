@@ -34,7 +34,7 @@ graphResultsPager({
 });
 ```
 
-For an example in node, try running `node example.js`
+For an example in node, try running `node example.js` ([see source](./example.js))
 
 ## Direct browser usage
 
