@@ -13,6 +13,7 @@ graphResultsPager({
 	api: 'https://api.thegraph.com/subgraphs/name/...',
 	// Note: a single subgraph fetch can return 1000 results, any larger numbers will trigger multiple fetches
 	max: 12, // leave empty for all results
+	timeout: 5e3, // 5s timeout for an individual page request
 	query: {
 		entity: '...',
 		selection: {

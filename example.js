@@ -17,6 +17,7 @@ const hexToAscii = str => {
 graphResultsPager({
 	api: 'https://api.thegraph.com/subgraphs/name/synthetixio-team/synthetix-exchanges',
 	max: 10,
+	timeout: 5e3,
 	query: {
 		entity: 'synthExchanges',
 		selection: {

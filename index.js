@@ -12,9 +12,10 @@ const MAX_PAGE_SIZE = 1000; // The Graph max page size
  * @param {string} query.entity - The entity name
  * @param {Object} query.selection - The selection mapping object for GraphQL filters and sorts
  * @param {Object} query.properties - The list of fields to include in the output
+ * @param {number} timeout - Number of ms timeout for any single graph paging result (default: 10seconds)
  * @param {number} max - Maximum number of results to return (default: Infinity)
  */
-const pageResults = ({ api, query: { entity, selection = {}, properties = [] }, max = Infinity }) => {
+const pageResults = ({ api, query: { entity, selection = {}, properties = [] }, timeout = 10e3, max = Infinity }) => {
 	max = Number(max);
 	const pageSize = MAX_PAGE_SIZE;
 
@@ -46,6 +47,7 @@ const pageResults = ({ api, query: { entity, selection = {}, properties = [] }, 
 		return fetch(api, {
 			method: 'POST',
 			body,
+			timeout,
 		})
 			.then(response => response.json())
 			.then(json => {
