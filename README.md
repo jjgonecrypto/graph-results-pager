@@ -1,5 +1,7 @@
 # graph-results-pager
 
+[![npm version](https://badge.fury.io/js/graph-results-pager.svg)](https://badge.fury.io/js/graph-results-pager)
+
 Utility to get paged results from The Graph endpoints
 
 ## Node & Webpack Usage
