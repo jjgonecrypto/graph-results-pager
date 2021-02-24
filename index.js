@@ -31,6 +31,10 @@ const pageResults = ({ api, query: { entity, selection = {}, properties = [] }, 
 
 		const first = MAX_PAGE_SIZE;
 
+		if(!properties.includes('id')) {
+			properties.push('id');
+		};
+
 		// mix the page size and skip fields into the selection object
 		const selectionObj = Object.assign({}, selection, {
 			first,
