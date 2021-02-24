@@ -22,19 +22,27 @@ const pageResults = ({ api, query: { entity, selection = {}, properties = [] }, 
 	// Note: this approach will call each page in linear order, ensuring it stops as soon as all results
 	// are fetched. This could be sped up with a number of requests done in parallel, stopping as soon as any return
 	// empty. - JJM
-	const runner = ({ skip }) => {
+	const runner = ({ lastId }) => {
 		const propToString = obj =>
 			Object.entries(obj)
 				.filter(([, value]) => typeof value !== 'undefined')
 				.map(([key, value]) => `${key}:${typeof value === 'object' ? '{' + propToString(value) + '}' : value}`)
 				.join(',');
 
-		const first = skip + pageSize > max ? max % pageSize : pageSize;
+		const first = MAX_PAGE_SIZE;
+
+		if(!properties.includes('id')) {
+			properties.push('id');
+		};
 
 		// mix the page size and skip fields into the selection object
 		const selectionObj = Object.assign({}, selection, {
 			first,
-			skip,
+			orderBy: 'id',
+			where: { 
+				...selection.where, 
+				...lastId ? {id_gt: `\\"${lastId}\\"`} : {} 
+			},
 		});
 
 		const body = `{"query":"{${entity}(${propToString(selectionObj)}){${properties.join(',')}}}", "variables": null}`;
@@ -42,7 +50,7 @@ const pageResults = ({ api, query: { entity, selection = {}, properties = [] }, 
 		// support query logging in nodejs
 		if (typeof process === 'object' && process.env.DEBUG === 'true') {
 			console.log(body);
-		}
+		};
 
 		return fetch(api, {
 			method: 'POST',
@@ -59,15 +67,19 @@ const pageResults = ({ api, query: { entity, selection = {}, properties = [] }, 
 				} = json;
 
 				// stop if we are on the last page
-				if (results.length < pageSize || Math.min(max, skip + results.length) >= max) {
+				if (results.length < pageSize || results.length >= max) {
+					if(results.length >= max) {
+						return results.slice(0, max);
+					}
+
 					return results;
 				}
 
-				return runner({ skip: skip + pageSize }).then(newResults => results.concat(newResults));
+				return runner({ lastId: results[results.length-1].id }).then(newResults => results.concat(newResults));
 			});
 	};
 
-	return runner({ skip: 0 });
+	return runner({ lastId: undefined });
 };
 
 module.exports = pageResults;

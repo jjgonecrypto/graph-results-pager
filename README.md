@@ -19,6 +19,7 @@ graphResultsPager({
 	query: {
 		entity: '...',
 		selection: {
+			// Note: orderBy DOES NOT WORK due to how the paging is implemented, it is overriden by id 
 			orderBy: '...',
 			orderDirection: 'desc',
 			where: {

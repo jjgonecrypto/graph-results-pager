@@ -21,8 +21,6 @@ graphResultsPager({
 	query: {
 		entity: 'synthExchanges',
 		selection: {
-			orderBy: 'timestamp',
-			orderDirection: 'desc',
 			where: {
 				timestamp_gt: Math.floor(Date.now() / 1e3) - 3600 * 24, // one day ago
 			},
